@@ -29,3 +29,13 @@ docker run --rm -p 8080:8080 -e NEW_RELIC_LICENSE_KEY=$NEW_RELIC_LICENSE_KEY exa
 curl localhost:8080/sync
 curl localhost:8080/async
 ```
+
+## Results
+
+### Server logs
+
+![server-logs.png](img/server-logs.png)
+
+### NewRelic logs
+
+![newrelic-logs.png](img/newrelic-logs.png)

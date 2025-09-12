@@ -1,0 +1,10 @@
+.bsp/
+.idea/
+.bloop/
+.metals/
+.vscode/
+target/
+project/project/**
+.env
+.sdkmanrc
+.tool-versions

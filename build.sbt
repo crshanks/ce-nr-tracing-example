@@ -14,7 +14,8 @@ lazy val `ce-nr-tracing-example` = project
       "org.http4s"                    %% "http4s-blaze-server"     % "0.23.17",
       "com.softwaremill.sttp.client3" %% "cats"                    % "3.11.0",
       "ch.qos.logback"                 % "logback-classic"         % "1.5.18",
-      "com.newrelic.agent.java"        % "newrelic-agent"          % "8.24.0"
+      "com.newrelic.agent.java"        % "newrelic-agent"          % "8.24.0",
+      "com.newrelic.agent.java"        % "newrelic-scala-api_3"    % "8.24.0"
     )
   )
   .settings(

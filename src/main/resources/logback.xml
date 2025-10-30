@@ -5,6 +5,7 @@
 
     <contextName>example</contextName>
 
+    <!-- Console appender -->
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
             <pattern>%cyan(%d{yyyy-MM-dd HH:mm:ss}) %magenta(| %-5level | %logger{30} |>) %m%n</pattern>

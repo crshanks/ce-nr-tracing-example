@@ -4,6 +4,12 @@
 
 This guide demonstrates how to manually instrument a Scala 3 application using Cats Effect with New Relic when automatic instrumentation is not fully available.
 
+**Important Note**: This repository intentionally contrasts two patterns:
+- **`/sync` endpoint**: Demonstrates the *wrong* way (blocking IO thread pool) - you'll see Cats Effect warnings
+- **`/async` endpoint**: Demonstrates the *right* way (using `F.blocking` for blocking operations) - no warnings
+
+Both endpoints can be instrumented with New Relic, but the async pattern is the recommended approach for production code. The warnings you see are educational and highlight why proper async handling matters.
+
 ## Background
 
 The New Relic Java agent currently has limited automatic instrumentation for:
@@ -126,12 +132,16 @@ bin/runner.sh
 ### Send Test Requests
 
 ```bash
-# Test sync endpoint
+# Test sync endpoint (expect Cats Effect warnings about thread starvation)
 curl localhost:8080/sync
 
-# Test async endpoint
+# Test async endpoint (should not produce warnings)
 curl localhost:8080/async
 ```
+
+**Expected behavior:**
+- `/sync`: You'll see Cats Effect warnings about blocking the IO thread pool. This is intentional and demonstrates why proper async patterns matter.
+- `/async`: No warnings should appear because blocking operations are properly isolated to the blocking thread pool.
 
 ### View in New Relic
 
@@ -148,12 +158,22 @@ curl localhost:8080/async
 - `F.cede` has minimal effect (already on IO pool)
 - Simpler instrumentation (no tokens needed)
 - Segments show sequential execution
+- **⚠️ Warning**: This endpoint intentionally demonstrates poor practice by using `Thread.sleep()` in `F.delay`, which blocks the IO thread pool. You'll see Cats Effect warnings about thread starvation:
+  ```
+  Your app's responsiveness to a new asynchronous event was in excess of 100 milliseconds.
+  Your CPU is probably starving. Consider increasing the granularity of your delays or adding
+  more cedes. This may also be a sign that you are unintentionally running blocking I/O
+  operations without the blocking combinator.
+  ```
+  This is expected and illustrates why the async pattern is important.
 
 ### /async Endpoint
 - Operations explicitly move to blocking thread pool via `F.blocking`
 - Tokens required to maintain trace context
 - Shows true async execution pattern
 - Segments clearly show thread transitions
+- **✓ Best Practice**: Properly uses `F.blocking` for blocking operations, preventing IO thread starvation
+- No Cats Effect warnings should appear
 
 ## Best Practices
 

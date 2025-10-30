@@ -210,7 +210,7 @@ curl localhost:8080/async
 
 For a more idiomatic Scala solution, consider [otel4s](https://typelevel.org/otel4s/):
 - Native Cats Effect integration
-- Vendor-agnostic (works with New Relic, Datadog, etc.)
+- Vendor-agnostic (works with New Relic as well)
 - More idiomatic Scala 3 APIs
 - Still requires manual instrumentation
 - Currently experimental
